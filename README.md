@@ -1,1 +1,1 @@
-# simulation-course
+# Simulation course
