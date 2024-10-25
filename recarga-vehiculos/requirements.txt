@@ -1,0 +1,6 @@
+# How to install:
+#     pip3 install -r requirements.txt
+
+simpy
+matplotlib
+numpy
