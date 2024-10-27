@@ -1,0 +1,2 @@
+# Print arrival times for Bus 1
+# print(arrival_times[arrival_times['Bus'] == 'Bus 1'])
