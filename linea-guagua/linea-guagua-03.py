@@ -8,26 +8,35 @@ import plotly.graph_objects as go
 NUM_BUSES = 3
 MAX_PASSENGERS = 50
 NUM_STOPS = 5
-BUS_INTERVAL = 20  # minutes
+BUS_INTERVAL = 30  # minutes
 SIMULATION_TIME = 24 * 60  # minutes in a day
 MIN_TIME_BETWEEN_STOPS = 20  # minimum time between stops (minutes)
 MAX_TIME_BETWEEN_STOPS = 40  # maximum time between stops (minutes)
+MIN_BOARDING_TIME = 1  # minimum boarding time (minutes)
+MAX_BOARDING_TIME = 3  # maximum boarding time (minutes)
+FARE_PER_STOP = 1.5  # fare per stop in currency units
 
 stops = [f"Stop {i + 1}" for i in range(NUM_STOPS)]
 
 # DataFrame to store bus arrival times
-arrival_times = pd.DataFrame(columns=['Bus', 'Stop', 'Arrival Time'])
+arrival_times = pd.DataFrame(columns=['Bus', 'Stop', 'Arrival Time', 'Departure Time', 'Passengers Arrival', 'Passengers Departure'])
 
 # DataFrame to store passenger journey details
-passenger_journeys = pd.DataFrame(columns=['Passenger ID', 'Arrival Time at Stop', 'Boarding Time', 'Bus', 'Destination Stop', 'Alighting Time', 'Waiting Time', 'Travel Time'])
+passenger_journeys = pd.DataFrame(columns=['Passenger ID', 'Arrival Time at Stop', 'Boarding Time', 'Bus', 'Destination Stop', 'Alighting Time', 'Waiting Time', 'Travel Time', 'Fare'])
+
+# DataFrame to store revenue details
+bus_revenues = pd.DataFrame(columns=['Bus', 'Total Revenue'])
 
 class BusSystem:
     def __init__(self, env):
         self.env = env
-        self.buses = [env.process(self.bus_process(env, f"Bus {i + 1}")) for i in range(NUM_BUSES)]
+        self.buses = [env.process(self.bus_process(env, f"Bus {i + 1}", i * BUS_INTERVAL)) for i in range(NUM_BUSES)]
         self.passenger_generator = env.process(self.generate_passengers(env))
+        self.revenues = {f"Bus {i + 1}": 0 for i in range(NUM_BUSES)}
+        self.passengers_picked_up = {stop: 0 for stop in stops}
 
-    def bus_process(self, env, bus_name):
+    def bus_process(self, env, bus_name, initial_delay):
+        yield env.timeout(initial_delay)  # Initial delay for staggered bus starts
         while True:
             # Bus starts at the central station
             departure_time = env.now
@@ -39,9 +48,7 @@ class BusSystem:
                 yield env.timeout(random.randint(MIN_TIME_BETWEEN_STOPS, MAX_TIME_BETWEEN_STOPS))  # Random time between stops
                 arrival_time = env.now
                 print(f"{bus_name} arrives at {stop} at {self.time_to_string(arrival_time)}")
-                
-                # Record arrival time in DataFrame
-                arrival_times.loc[len(arrival_times)] = [bus_name, stop, self.time_to_string(arrival_time)]
+                passengers_arrival = len(passengers)
 
                 # Drop off passengers
                 passengers = [p for p in passengers if not self.drop_off_passenger(p, stop, bus_name)]
@@ -51,14 +58,22 @@ class BusSystem:
                     passenger = stop_queue[stop].get()
                     passenger['boarding_time'] = env.now
                     passenger['bus'] = bus_name
-                    print(f"Passenger {passenger['id']} boards {bus_name} at {stop} at {self.time_to_string(env.now)}")
+                    boarding_time = random.randint(MIN_BOARDING_TIME, MAX_BOARDING_TIME)
+                    yield env.timeout(boarding_time)  # Time taken for passenger to board
+                    print(f"Passenger {passenger['id']} boards {bus_name} at {stop} at {self.time_to_string(env.now)} (Boarding time: {boarding_time} minutes)")
                     passengers.append(passenger)
+                    self.passengers_picked_up[stop] += 1
+
+                passengers_departure = len(passengers)
+                departure_time = env.now + random.randint(MIN_BOARDING_TIME, MAX_BOARDING_TIME)  # Example departure time calculation
+                arrival_times.loc[len(arrival_times)] = [bus_name, stop, self.time_to_string(arrival_time), self.time_to_string(departure_time), passengers_arrival, passengers_departure]
 
             # Return to central station
             yield env.timeout(random.randint(MIN_TIME_BETWEEN_STOPS, MAX_TIME_BETWEEN_STOPS))  # Random time back to central station
             arrival_time = env.now
+            passengers_arrival = len(passengers)
             print(f"{bus_name} returns to Central Station at {self.time_to_string(arrival_time)}")
-            arrival_times.loc[len(arrival_times)] = [bus_name, 'Central Station', self.time_to_string(arrival_time)]
+            arrival_times.loc[len(arrival_times)] = [bus_name, 'Central Station', self.time_to_string(arrival_time), 'N/A', passengers_arrival, 'N/A']
             yield env.timeout(BUS_INTERVAL)
 
     def drop_off_passenger(self, passenger, stop, bus_name):
@@ -66,7 +81,10 @@ class BusSystem:
             alighting_time = env.now
             waiting_time = passenger['boarding_time'] - passenger['arrival_time']
             travel_time = alighting_time - passenger['boarding_time']
-            print(f"Passenger {passenger['id']} gets off {bus_name} at {stop} at {self.time_to_string(alighting_time)}")
+            num_stops = stops.index(stop) - stops.index(passenger['stop'])
+            fare = num_stops * FARE_PER_STOP
+            self.revenues[bus_name] += fare
+            print(f"Passenger {passenger['id']} gets off {bus_name} at {stop} at {self.time_to_string(alighting_time)}. Fare: {fare}")
             passenger_journeys.loc[len(passenger_journeys)] = [
                 passenger['id'],
                 self.time_to_string(passenger['arrival_time']),
@@ -75,7 +93,8 @@ class BusSystem:
                 stop,
                 self.time_to_string(alighting_time),
                 waiting_time,
-                travel_time
+                travel_time,
+                fare
             ]
             return True
         return False
@@ -86,15 +105,20 @@ class BusSystem:
             yield env.timeout(random.randint(1, 10))  # Randomly generate passengers
             stop = random.choice(stops)
             destination = random.choice([s for s in stops if s != stop])
+            has_luggage = random.choice([True, False])
+            boarding_time_multiplier = 2 if has_luggage else 1
             passenger = {
                 'id': passenger_id,
                 'arrival_time': env.now,
                 'stop': stop,
-                'destination': destination
+                'destination': destination,
+                'has_luggage': has_luggage,
+                'boarding_time_multiplier': boarding_time_multiplier
             }
             passenger_id += 1
             stop_queue[stop].put(passenger)
-            print(f"Passenger {passenger['id']} arrives at {stop} at {self.time_to_string(env.now)}, destination: {destination}")
+            luggage_info = "with luggage" if has_luggage else "without luggage"
+            print(f"Passenger {passenger['id']} arrives at {stop} at {self.time_to_string(env.now)}, destination: {destination} ({luggage_info})")
 
     @staticmethod
     def time_to_string(minutes):
@@ -127,9 +151,28 @@ env.run(until=SIMULATION_TIME)
 print("\nBus Arrival Times Table:")
 print(arrival_times)
 
+# Check if the DataFrame is empty
+if arrival_times.empty:
+    print("No bus arrival times were recorded.")
+else:
+    print(arrival_times)
+
 # Display passenger journey details table
 print("\nPassenger Journeys Table:")
 print(passenger_journeys)
+
+# Check if the DataFrame is empty
+if passenger_journeys.empty:
+    print("No passenger journeys were recorded.")
+else:
+    print(passenger_journeys)
+
+# Display bus revenues
+for bus, revenue in bus_system.revenues.items():
+    bus_revenues.loc[len(bus_revenues)] = [bus, revenue]
+
+print("\nBus Revenue Table:")
+print(bus_revenues)
 
 # Plot the bus routes
 def plot_bus_routes(arrival_times):
@@ -163,6 +206,21 @@ def plot_passenger_waiting_times(passenger_journeys):
 
 plot_passenger_waiting_times(passenger_journeys)
 
+# Plot the number of passengers picked up at each stop
+def plot_passengers_picked_up(bus_system):
+    plt.figure(figsize=(10, 6))
+    stops = list(bus_system.passengers_picked_up.keys())
+    passengers_picked_up = list(bus_system.passengers_picked_up.values())
+    plt.bar(stops, passengers_picked_up, color='green')
+    plt.xlabel('Stop')
+    plt.ylabel('Number of Passengers Picked Up')
+    plt.title('Number of Passengers Picked Up at Each Stop')
+    plt.grid(axis='y')
+    plt.tight_layout()
+    plt.show()
+
+plot_passengers_picked_up(bus_system)
+
 # Plot a Sankey diagram showing the flow of passengers between stops
 def plot_sankey_diagram(passenger_journeys):
     if passenger_journeys.empty:
@@ -170,30 +228,3 @@ def plot_sankey_diagram(passenger_journeys):
         return
 
     source_stops = passenger_journeys['Arrival Time at Stop'].tolist()
-    destination_stops = passenger_journeys['Destination Stop'].tolist()
-    stop_names = list(set(source_stops + destination_stops))
-    stop_indices = {name: i for i, name in enumerate(stop_names)}
-
-    sources = [stop_indices[stop] for stop in source_stops]
-    targets = [stop_indices[stop] for stop in destination_stops]
-    values = [1] * len(sources)
-
-    fig = go.Figure(data=[go.Sankey(
-        node=dict(
-            pad=15,
-            thickness=20,
-            line=dict(color="black", width=0.5),
-            label=stop_names
-        ),
-        link=dict(
-            source=sources,
-            target=targets,
-            value=values
-        )
-    )])
-
-    fig.update_layout(title_text="Passenger Flow Between Stops", font_size=10)
-    fig.show()
-
-plot_sankey_diagram(passenger_journeys)
-
