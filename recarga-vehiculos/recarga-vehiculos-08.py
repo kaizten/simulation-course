@@ -1,12 +1,9 @@
-# añade Distribución de Espera por Intervalo de Tiempo: Analizar cómo varía el tiempo de espera en diferentes momentos del día.
-#He añadido la métrica de "Distribución de Espera por Intervalo de Tiempo" para analizar cómo varía el tiempo de espera en diferentes momentos del día, además de una gráfica que muestra el tiempo de espera promedio por hora. ¿Hay algo más que te gustaría agregar o modificar?
-
 import simpy
 import random
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Definimos parámetros globales
+# Parámetros globales
 NUM_STATIONS = 5                # Número de estaciones de recarga
 CHARGING_SPOTS = 2              # Número de puntos de recarga por estación
 SIM_TIME = 1440                 # Tiempo de simulación en minutos (1 día)
@@ -116,45 +113,45 @@ def main():
         print(f'Station {i} vehicles served: {vehicles_per_station[i]}')
 
     plt.figure(figsize=(24, 5))
-    plt.subplot(1, 8, 1)
+    plt.subplot(2, 4, 1)
     plt.hist(waiting_times, bins=20, color='skyblue', edgecolor='black')
     plt.xlabel('Tiempo de Espera (minutos)')
     plt.ylabel('Frecuencia')
     plt.title('Distribución de Tiempos de Espera')
     
-    plt.subplot(1, 8, 2)
+    plt.subplot(2, 4, 2)
     plt.hist(charging_times, bins=20, color='lightgreen', edgecolor='black')
     plt.xlabel('Tiempo de Carga (minutos)')
     plt.ylabel('Frecuencia')
     plt.title('Distribución de Tiempos de Carga')
     
-    plt.subplot(1, 8, 3)
+    plt.subplot(2, 4, 3)
     plt.hist(usage_times, bins=20, color='lightcoral', edgecolor='black')
     plt.xlabel('Tiempo de Uso (minutos)')
     plt.ylabel('Frecuencia')
     plt.title('Distribución de Tiempos de Uso')
     
-    plt.subplot(1, 8, 4)
+    plt.subplot(2, 4, 4)
     plt.bar(['Total Vehicles', 'Vehicles Charged', 'Vehicles Waited', 'Vehicles Abandoned'], [total_vehicles, vehicles_charged, vehicles_waited, vehicles_abandoned], color=['blue', 'green', 'red', 'orange'])
     plt.ylabel('Cantidad')
     plt.title('Estadísticas de Vehículos')
     
-    plt.subplot(1, 8, 5)
+    plt.subplot(2, 4, 5)
     plt.bar([f'Station {i}' for i in range(NUM_STATIONS)], station_utilization, color='purple')
     plt.ylabel('Porcentaje de Utilización')
     plt.title('Utilización de Estaciones')
     
-    plt.subplot(1, 8, 6)
+    plt.subplot(2, 4, 6)
     plt.bar([f'Station {i}' for i in range(NUM_STATIONS)], vehicles_per_station, color='orange')
     plt.ylabel('Cantidad de Vehículos Atendidos')
     plt.title('Vehículos Atendidos por Estación')
     
-    plt.subplot(1, 8, 7)
+    plt.subplot(2, 4, 7)
     plt.bar(['Vehicles Abandoned'], [vehicles_abandoned], color='red')
     plt.ylabel('Cantidad')
     plt.title('Vehículos que Abandonaron')
     
-    plt.subplot(1, 8, 8)
+    plt.subplot(2, 4, 8)
     avg_waiting_times_per_hour = [np.mean(times) if times else 0 for times in waiting_times_by_interval]
     plt.plot(range(24), avg_waiting_times_per_hour, marker='o', color='blue')
     plt.xlabel('Hora del Día')

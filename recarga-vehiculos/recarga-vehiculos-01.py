@@ -1,7 +1,7 @@
 import simpy
 import random
 
-# Definimos parámetros globales
+# Parámetros globales
 NUM_STATIONS = 5                # Número de estaciones de recarga
 CHARGING_SPOTS = 2              # Número de puntos de recarga por estación
 SIM_TIME = 1440                 # Tiempo de simulación en minutos (1 día)
@@ -9,6 +9,7 @@ INTER_ARRIVAL_TIME = 15         # Tiempo medio entre llegadas de vehículos (min
 CHARGING_TIME_MEAN = 60         # Tiempo medio de carga de cada vehículo (minutos)
 
 class EVChargingStation:
+    """Estación de recarga de vehículos eléctricos"""
     def __init__(self, env, num_spots):
         self.env = env
         self.charging_spots = simpy.Resource(env, num_spots)
@@ -35,8 +36,8 @@ def setup(env, num_stations, charging_spots):
 
     while True:
         # Tiempo de llegada del siguiente vehículo
-        arrival_delay = random.expovariate(1.0 / INTER_ARRIVAL_TIME)
-        charging_time = random.expovariate(1.0 / CHARGING_TIME_MEAN)
+        arrival_delay = random.expovariate(1.0 / INTER_ARRIVAL_TIME) # Distribución exponencial
+        charging_time = random.expovariate(1.0 / CHARGING_TIME_MEAN) # Distribución exponencial
         selected_station = random.choice(stations)  # Selecciona una estación aleatoria
         
         # Crear un vehículo y pasarlo a la simulación

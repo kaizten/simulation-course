@@ -2,7 +2,7 @@ import simpy
 import random
 import matplotlib.pyplot as plt
 
-# Definimos parámetros globales
+# Parámetros globales
 NUM_STATIONS = 5                # Número de estaciones de recarga
 CHARGING_SPOTS = 2              # Número de puntos de recarga por estación
 SIM_TIME = 1440                 # Tiempo de simulación en minutos (1 día)

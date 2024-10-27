@@ -1,12 +1,9 @@
-# añade Distribución de la Utilización por Estación: Mostrar la cantidad de vehículos que cada estación atendió, para analizar la carga de cada una.
-# He agregado la métrica de "Distribución de la Utilización por Estación", que muestra la cantidad de vehículos atendidos por cada estación. También he añadido un gráfico de barras para visualizar estos datos. ¿Hay algo más que te gustaría agregar o modificar?
-
 import simpy
 import random
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Definimos parámetros globales
+# Parámetros globales
 NUM_STATIONS = 5                # Número de estaciones de recarga
 CHARGING_SPOTS = 2              # Número de puntos de recarga por estación
 SIM_TIME = 1440                 # Tiempo de simulación en minutos (1 día)
@@ -102,35 +99,35 @@ def main():
         print(f'Station {i} vehicles served: {vehicles_per_station[i]}')
 
     plt.figure(figsize=(18, 5))
-    plt.subplot(1, 6, 1)
+    plt.subplot(2, 3, 1)
     plt.hist(waiting_times, bins=20, color='skyblue', edgecolor='black')
     plt.xlabel('Tiempo de Espera (minutos)')
     plt.ylabel('Frecuencia')
     plt.title('Distribución de Tiempos de Espera')
     
-    plt.subplot(1, 6, 2)
+    plt.subplot(2, 3, 2)
     plt.hist(charging_times, bins=20, color='lightgreen', edgecolor='black')
     plt.xlabel('Tiempo de Carga (minutos)')
     plt.ylabel('Frecuencia')
     plt.title('Distribución de Tiempos de Carga')
     
-    plt.subplot(1, 6, 3)
+    plt.subplot(2, 3, 3)
     plt.hist(usage_times, bins=20, color='lightcoral', edgecolor='black')
     plt.xlabel('Tiempo de Uso (minutos)')
     plt.ylabel('Frecuencia')
     plt.title('Distribución de Tiempos de Uso')
     
-    plt.subplot(1, 6, 4)
+    plt.subplot(2, 3, 4)
     plt.bar(['Total Vehicles', 'Vehicles Charged', 'Vehicles Waited'], [total_vehicles, vehicles_charged, vehicles_waited], color=['blue', 'green', 'red'])
     plt.ylabel('Cantidad')
     plt.title('Estadísticas de Vehículos')
     
-    plt.subplot(1, 6, 5)
+    plt.subplot(2, 3, 5)
     plt.bar([f'Station {i}' for i in range(NUM_STATIONS)], station_utilization, color='purple')
     plt.ylabel('Porcentaje de Utilización')
     plt.title('Utilización de Estaciones')
     
-    plt.subplot(1, 6, 6)
+    plt.subplot(2, 3, 6)
     plt.bar([f'Station {i}' for i in range(NUM_STATIONS)], vehicles_per_station, color='orange')
     plt.ylabel('Cantidad de Vehículos Atendidos')
     plt.title('Vehículos Atendidos por Estación')

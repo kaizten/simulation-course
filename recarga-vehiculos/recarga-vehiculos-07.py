@@ -1,12 +1,9 @@
-#añade Tasa de Abandono: Simular la posibilidad de que los vehículos se vayan si el tiempo de espera es demasiado largo, y medir cuántos vehículos abandonan.
-#He añadido la métrica de "Tasa de Abandono", que simula la posibilidad de que los vehículos abandonen si el tiempo de espera excede un valor máximo. También he añadido una gráfica para visualizar los vehículos que abandonaron. ¿Te gustaría agregar alguna otra métrica o realizar más modificaciones?
-
 import simpy
 import random
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Definimos parámetros globales
+# Parámetros globales
 NUM_STATIONS = 5                # Número de estaciones de recarga
 CHARGING_SPOTS = 2              # Número de puntos de recarga por estación
 SIM_TIME = 1440                 # Tiempo de simulación en minutos (1 día)
@@ -113,40 +110,40 @@ def main():
         print(f'Station {i} vehicles served: {vehicles_per_station[i]}')
 
     plt.figure(figsize=(18, 5))
-    plt.subplot(1, 7, 1)
+    plt.subplot(2, 4, 1)
     plt.hist(waiting_times, bins=20, color='skyblue', edgecolor='black')
     plt.xlabel('Tiempo de Espera (minutos)')
     plt.ylabel('Frecuencia')
     plt.title('Distribución de Tiempos de Espera')
     
-    plt.subplot(1, 7, 2)
+    plt.subplot(2, 4, 2)
     plt.hist(charging_times, bins=20, color='lightgreen', edgecolor='black')
     plt.xlabel('Tiempo de Carga (minutos)')
     plt.ylabel('Frecuencia')
     plt.title('Distribución de Tiempos de Carga')
     
-    plt.subplot(1, 7, 3)
+    plt.subplot(2, 4, 3)
     plt.hist(usage_times, bins=20, color='lightcoral', edgecolor='black')
     plt.xlabel('Tiempo de Uso (minutos)')
     plt.ylabel('Frecuencia')
     plt.title('Distribución de Tiempos de Uso')
     
-    plt.subplot(1, 7, 4)
+    plt.subplot(2, 4, 4)
     plt.bar(['Total Vehicles', 'Vehicles Charged', 'Vehicles Waited', 'Vehicles Abandoned'], [total_vehicles, vehicles_charged, vehicles_waited, vehicles_abandoned], color=['blue', 'green', 'red', 'orange'])
     plt.ylabel('Cantidad')
     plt.title('Estadísticas de Vehículos')
     
-    plt.subplot(1, 7, 5)
+    plt.subplot(2, 4, 5)
     plt.bar([f'Station {i}' for i in range(NUM_STATIONS)], station_utilization, color='purple')
     plt.ylabel('Porcentaje de Utilización')
     plt.title('Utilización de Estaciones')
     
-    plt.subplot(1, 7, 6)
+    plt.subplot(2, 4, 6)
     plt.bar([f'Station {i}' for i in range(NUM_STATIONS)], vehicles_per_station, color='orange')
     plt.ylabel('Cantidad de Vehículos Atendidos')
     plt.title('Vehículos Atendidos por Estación')
     
-    plt.subplot(1, 7, 7)
+    plt.subplot(2, 4, 7)
     plt.bar(['Vehicles Abandoned'], [vehicles_abandoned], color='red')
     plt.ylabel('Cantidad')
     plt.title('Vehículos que Abandonaron')

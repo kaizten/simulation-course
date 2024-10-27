@@ -3,7 +3,7 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Definimos parámetros globales
+# Parámetros globales
 NUM_STATIONS = 5                # Número de estaciones de recarga
 CHARGING_SPOTS = 2              # Número de puntos de recarga por estación
 SIM_TIME = 1440                 # Tiempo de simulación en minutos (1 día)
@@ -107,7 +107,10 @@ def main():
     plt.title('Distribución de Tiempos de Uso')
     
     plt.subplot(1, 4, 4)
-    plt.bar(['Total Vehículos', 'Vehículos Cargados', 'Vehicles Esperan'], [total_vehicles, vehicles_charged, vehicles_waited], color=['blue', 'green', 'red'])
+    plt.bar(['Total Vehículos', 'Vehículos Cargados', 'Vehicles Esperan'], 
+            [total_vehicles, vehicles_charged, vehicles_waited], 
+            color=['blue', 'green', 'red'])
+    plt.xticks(rotation=90) 
     plt.ylabel('Cantidad')
     plt.title('Estadísticas de Vehículos')
     
