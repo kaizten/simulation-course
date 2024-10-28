@@ -1,7 +1,7 @@
 # How to install:
 #     pip3 install -r requirements.txt
 
-simpy
-matplotlib
-numpy
-pygame
+matplotlib>=3.9.2
+numpy>=2.1.2
+pygame>=2.6.1
+simpy>=4.1.1

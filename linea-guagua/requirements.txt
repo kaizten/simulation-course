@@ -1,6 +1,6 @@
 # How to install:
 #     pip3 install -r requirements.txt
 
-pandas
+pandas>=2.2.3
 plotly==5.24.0
-simpy
+simpy>=4.1.1
