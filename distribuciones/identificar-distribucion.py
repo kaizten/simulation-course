@@ -3,8 +3,10 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats
 import seaborn as sns
 
-# Generate data for a normal distribution with 1000 elements
-data = np.random.normal(loc=0, scale=1, size=1000)
+ELEMENTS=10000 # Number of elements
+
+# Generate data for a normal distribution with elements
+data = np.random.normal(loc=0, scale=1, size=ELEMENTS)
 
 # Create a figure with multiple subplots
 fig, axs = plt.subplots(2, 2, figsize=(15, 12))
