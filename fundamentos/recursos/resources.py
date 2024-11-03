@@ -25,9 +25,7 @@ class MobilityModel:
         trip_duration = max(0, random.gauss(TRIP_DURATION_MEAN, TRIP_DURATION_SD))
         trip_start_time = env.now
         trip_start_times.append(trip_start_time)
-        
         yield self.env.timeout(trip_duration)
-        
         trip_end_time = env.now
         trip_end_times.append(trip_end_time)
         print(f"{env.now:.2f}: {person} completes the trip")
@@ -45,13 +43,11 @@ def person_trip(env, person_id, mobility_model):
     person_name = f"Person {person_id}"
     arrival_time = env.now
     print(f"{env.now:.2f}: {person_name} arrives and requests a vehicle.")
-    
     with mobility_model.vehicle_resource.request() as request:
         yield request
         wait_time = env.now - arrival_time
         wait_times.append(wait_time)
         person_ids.append(person_id)  # Store the person ID for this wait time
-        
         print(f"{env.now:.2f}: {person_name} acquired a vehicle.")
         yield env.process(mobility_model.trip(person_name))
 

@@ -18,10 +18,10 @@ for alpha in alpha_values:
     y = gamma.pdf(x, a=alpha, scale=beta)
     
     # Graficar la densidad de probabilidad
-    plt.plot(x, y, label=f'Gamma (alpha={alpha}, beta={beta})')
+    plt.plot(x, y, label=f'Gamma (\u03B1={alpha}, \u03B2={beta})')
 
 # Añadir título y etiquetas
-plt.title('Distribuciones Gamma con diferentes valores de alpha')
+plt.title('Distribuciones Gamma con diferentes valores de \u03B1')
 plt.xlabel('x')
 plt.ylabel('Densidad de probabilidad')
 plt.legend()

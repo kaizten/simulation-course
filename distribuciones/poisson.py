@@ -20,7 +20,7 @@ for lam, label in zip(lambdas, enum_labels):
 # Configuración del gráfico
 plt.xlabel('Número de eventos (k)')
 plt.ylabel('Probabilidad')
-plt.title('Distribuciones de Probabilidad de Poisson para Diferentes Valores de Lambda')
+plt.title('Distribuciones de probabilidad de Poisson para diferentes valores de Lambda')
 plt.legend()
 plt.grid(True)
 

@@ -2,14 +2,14 @@ import simpy
 import random
 import numpy as np
 
-# Parámetros del modelo
-CAPACIDAD_APARCAMIENTO = 50  # Número máximo de plazas disponibles
-TASA_LLEGADA_VEHICULOS = 1/2  # Tasa de llegada de vehículos (1 cada 2 minutos)
-DURACION_ESTANCIA_MIN = 10  # Estancia mínima en minutos
-DURACION_ESTANCIA_MAX = 60  # Estancia máxima en minutos
-TIEMPO_BUSQUEDA_LIMITE = 15  # Máximo tiempo de búsqueda antes de que el conductor se retire (minutos)
-TARIFA_BASE = 2  # Tarifa base de aparcamiento en unidades monetarias
-FACTOR_DEMANDA = 0.05  # Factor de incremento de la tarifa por ocupación alta
+# Parámetros:
+CAPACIDAD_APARCAMIENTO = 50     # Número máximo de plazas disponibles
+TASA_LLEGADA_VEHICULOS = 1/2    # Tasa de llegada de vehículos (1 cada 2 minutos)
+DURACION_ESTANCIA_MIN = 10      # Estancia mínima en minutos
+DURACION_ESTANCIA_MAX = 60      # Estancia máxima en minutos
+TIEMPO_BUSQUEDA_LIMITE = 15     # Máximo tiempo de búsqueda antes de que el conductor se retire (minutos)
+TARIFA_BASE = 2                 # Tarifa base de aparcamiento en unidades monetarias
+FACTOR_DEMANDA = 0.05           # Factor de incremento de la tarifa por ocupación alta
 
 # Estadísticas
 tiempos_busqueda = []

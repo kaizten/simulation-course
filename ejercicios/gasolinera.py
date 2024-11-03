@@ -2,7 +2,7 @@ import simpy
 import random
 import matplotlib.pyplot as plt
 
-# Parámetros de la simulación
+# Parámetros:
 TIEMPO_DE_SIMULACION = 1 * 60   # Tiempo de simulación en minutos
 TIEMPO_MIN_SERVICIO = 2         # Tiempo mínimo de servicio
 TIEMPO_MAX_SERVICIO = 5         # Tiempo máximo de servicio

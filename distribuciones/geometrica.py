@@ -17,8 +17,8 @@ for i, p in enumerate(p_values):
     plt.plot(x, pmf_values, marker='o', linestyle='-', label=f'p = {p}')
 
 # Añadir título y etiquetas
-plt.title('Distribuciones Geométricas con Diferentes Valores de p')
-plt.xlabel('Número de Intentos')
+plt.title('Distribuciones Geométricas con diferentes valores de p')
+plt.xlabel('Número de intentos')
 plt.ylabel('Probabilidad (PMF)')
 plt.legend()
 plt.grid()

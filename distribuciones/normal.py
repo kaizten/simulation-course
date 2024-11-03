@@ -20,7 +20,7 @@ plt.plot(x, pdf, label='Distribución Normal (media=0, sigma=1)', color='blue')
 # Agregar título y etiquetas
 plt.title('Distribución Normal')
 plt.xlabel('Valor')
-plt.ylabel('Densidad de Probabilidad')
+plt.ylabel('Densidad de probabilidad')
 plt.legend()
 
 # Mostrar la gráfica

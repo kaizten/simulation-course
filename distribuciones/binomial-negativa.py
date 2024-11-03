@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from scipy.stats import nbinom
 
 # Parámetros de la distribución binomial negativa
-r = 5  # Número de éxitos deseados
-p = 0.3  # Probabilidad de éxito en cada prueba
+r = 5       # Número de éxitos deseados
+p = 0.3     # Probabilidad de éxito en cada prueba
 
 # Definir el rango de valores de x
 x = np.arange(0, 40)  # Valores posibles de fracasos antes de alcanzar r éxitos
