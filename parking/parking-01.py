@@ -1,6 +1,5 @@
 import simpy
 import random
-import numpy as np
 import matplotlib.pyplot as plt
 
 # Parámetros:
@@ -124,7 +123,6 @@ plt.legend()
 plt.grid(True)
 
 # Gráfica del número de vehículos que no encontraron estacionamiento a lo largo del tiempo
-#times, vehicles_turned_away = zip(*parking_lot.vehicles_turned_away_history)
 plt.subplot(2, 2, 4)
 plt.bar(x=" ", height=parking_lot.vehicles_turned_away, label='Vehículos rechazados', color='orange')
 plt.xlim(xmin=0)
