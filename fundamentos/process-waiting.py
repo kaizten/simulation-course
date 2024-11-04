@@ -3,25 +3,22 @@ import simpy
 class Car(object):
     def __init__(self, env):
         self.env = env
-        # Start the run process everytime an instance is created.
+        # Comienza el proceso de ejecución cada vez que se crea una instancia.
         self.action = env.process(self.run())
 
     def run(self):
         while True:
-            print('Start parking and charging at %d' % self.env.now)
+            print('Comienza a aparcar y cargar a las %d' % self.env.now)
             charge_duration = 5
-            # We yield the process that process() returns
-            # to wait for it to finish
+            # Esperamos hasta que el proceso de carga termine
             yield self.env.process(self.charge(charge_duration))
-
-            # The charge process has finished and
-            # we can start driving again.
-            print('Start driving at %d' % self.env.now)
+            # El proceso de carga ha terminado y podemos empezar a conducir de nuevo.
+            print('Comienza a conducir a las %d' % self.env.now)
             trip_duration = 2
             yield self.env.timeout(trip_duration)
 
     def charge(self, duration):
-        print('Start charging at %d' % self.env.now)
+        print('Comienza a cargar a las %d' % self.env.now)
         yield self.env.timeout(duration)
         
 env = simpy.Environment()

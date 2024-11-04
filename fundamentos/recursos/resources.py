@@ -2,14 +2,14 @@ import simpy
 import random
 import matplotlib.pyplot as plt
 
-# Simulation parameters
+# Parameters:
 TRIP_DURATION_MEAN = 30  # Average duration of each trip
 TRIP_DURATION_SD = 5     # Standard deviation of trip duration
 INTER_ARRIVAL_TIME = 10  # Time between successive arrival of people at the vehicle station
 SIMULATION_TIME = 1000   # Total time to run the simulation
 NUM_VEHICLES = 5         # Total number of vehicles available
 
-# Data collection lists
+# Data collection lists:
 trip_start_times = []
 trip_end_times = []
 wait_times = []
@@ -79,7 +79,7 @@ plt.subplot(1, 2, 2)
 plt.bar(person_ids, wait_times, color='skyblue', edgecolor='black')
 plt.xlabel("Person Id")
 plt.ylabel("Waiting time")
-plt.title("Waiting times by person identifier")
+plt.title("Waiting times by person")
 plt.xticks(person_ids)  # Display each person ID on the x-axis
 
 plt.show()
