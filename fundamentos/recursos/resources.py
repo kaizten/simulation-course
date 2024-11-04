@@ -3,11 +3,11 @@ import random
 import matplotlib.pyplot as plt
 
 # Parameters:
+NUM_VEHICLES = 5         # Total number of vehicles available
 TRIP_DURATION_MEAN = 30  # Average duration of each trip
 TRIP_DURATION_SD = 5     # Standard deviation of trip duration
 INTER_ARRIVAL_TIME = 10  # Time between successive arrival of people at the vehicle station
 SIMULATION_TIME = 1000   # Total time to run the simulation
-NUM_VEHICLES = 5         # Total number of vehicles available
 
 # Data collection lists:
 trip_start_times = []

@@ -8,19 +8,19 @@ class Car(object):
 
     def run(self):
         while True:
-            print('Comienza a aparcar y cargar a las %d' % self.env.now)
-            charge_duration = 5
+            print(f'{self.env.now:.2f}: Comienza a aparcar')
+            charge_duration = 10
             # Esperamos hasta que el proceso de carga termine
             yield self.env.process(self.charge(charge_duration))
             # El proceso de carga ha terminado y podemos empezar a conducir de nuevo.
-            print('Comienza a conducir a las %d' % self.env.now)
-            trip_duration = 2
+            print(f'{self.env.now:.2f}: Comienza a conducir')
+            trip_duration = 50
             yield self.env.timeout(trip_duration)
 
     def charge(self, duration):
-        print('Comienza a cargar a las %d' % self.env.now)
+        print(f'{self.env.now:.2f}: Comienza a cargar')
         yield self.env.timeout(duration)
         
 env = simpy.Environment()
 car = Car(env)
-env.run(until=15)
+env.run(until=1000)

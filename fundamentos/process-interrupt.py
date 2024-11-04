@@ -17,7 +17,7 @@ def boy_uses_phone(env):
     try:
         while True:
             print(f"{env.now:.2f}: The boy is using his phone.")
-            yield env.timeout(1)
+            yield env.timeout(1000)
     except simpy.Interrupt:
         print(f"{env.now:.2f}: The bus arrives and the boy stops using his phone.")
 

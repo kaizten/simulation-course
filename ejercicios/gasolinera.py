@@ -10,6 +10,7 @@ TIEMPO_LLEGADA_CLIENTES = 3     # Intervalo de tiempo en que llegan clientes
 NUMERO_SURTIDORES = 3           # Número de surtidores en la gasolinera
 NUMERO_EMPLEADOS = 2            # Número de empleados atendiendo en la gasolinera
 
+# Estadísticas recopiladas:
 tiempo_uso_empleados = {}
 tiempo_uso_surtidores = {}
 tiempo_espera_vehiculos = {}
