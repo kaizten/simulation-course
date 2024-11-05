@@ -1,12 +1,18 @@
 import simpy
 
 def productor(env, store):
+    """
+    Función que simula el comportamiento de un productor.
+    """
     for i in range(5):
         print(f"Productor agrega elemento {i} en el instante {env.now}")
         yield store.put(i)
         yield env.timeout(1)
 
 def consumidor(env, store):
+    """
+    Función que simula el comportamiento de un consumidor.
+    """
     while True:
         item = yield store.get()
         print(f"Consumidor retira {item} en el instante {env.now}")

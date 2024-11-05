@@ -1,5 +1,5 @@
 # La guagua consume 15 unidades de combustible por unidad de tiempo.
-# Si el combustible en el tanque cae por debajo de 20 unidades, el autobús se detiene para repostar.
+# Si el combustible en el tanque cae por debajo de 20 unidades, la guagua se detiene para repostar.
 # El Container ayuda a modelar un ciclo típico de consumo y recarga de combustible.
 
 import simpy

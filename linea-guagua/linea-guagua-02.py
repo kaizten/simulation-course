@@ -4,16 +4,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
-# Constants
-NUM_BUSES = 3
-MAX_PASSENGERS = 50
-NUM_STOPS = 5
-BUS_INTERVAL = 30  # minutes
-SIMULATION_TIME = 24 * 60  # minutes in a day
-MIN_TIME_BETWEEN_STOPS = 20  # minimum time between stops (minutes)
-MAX_TIME_BETWEEN_STOPS = 40  # maximum time between stops (minutes)
-MIN_BOARDING_TIME = 1  # minimum boarding time (minutes)
-MAX_BOARDING_TIME = 3  # maximum boarding time (minutes)
+# Parameters:
+NUM_BUSES = 3                   # number of buses in the system
+MAX_PASSENGERS = 50             # maximum number of passengers a bus can carry
+NUM_STOPS = 5                   # number of stops on the bus route
+BUS_INTERVAL = 30               # interval between buses (minutes)
+SIMULATION_TIME = 24 * 60       # total simulation time (minutes)
+MIN_TIME_BETWEEN_STOPS = 20     # minimum time between stops (minutes)
+MAX_TIME_BETWEEN_STOPS = 40     # maximum time between stops (minutes)
+MIN_BOARDING_TIME = 1           # minimum boarding time (minutes)
+MAX_BOARDING_TIME = 3           # maximum boarding time (minutes)
 
 stops = [f"Stop {i + 1}" for i in range(NUM_STOPS)]
 
@@ -24,12 +24,21 @@ arrival_times = pd.DataFrame(columns=['Bus', 'Stop', 'Arrival Time', 'Departure 
 passenger_journeys = pd.DataFrame(columns=['Passenger ID', 'Arrival Time at Stop', 'Boarding Time', 'Bus', 'Destination Stop', 'Alighting Time', 'Waiting Time', 'Travel Time'])
 
 class BusSystem:
+    """
+    Class to represent the bus system with multiple buses and passengers.
+    """
     def __init__(self, env):
+        """
+        Initialize the bus system with the given simulation environment.
+        """
         self.env = env
         self.buses = [env.process(self.bus_process(env, f"Bus {i + 1}", i * BUS_INTERVAL)) for i in range(NUM_BUSES)]
         self.passenger_generator = env.process(self.generate_passengers(env))
 
     def bus_process(self, env, bus_name, initial_delay):
+        """
+        Process that simulates the bus behavior.
+        """
         yield env.timeout(initial_delay)  # Initial delay for staggered bus starts
         while True:
             # Bus starts at the central station
@@ -70,6 +79,9 @@ class BusSystem:
             yield env.timeout(BUS_INTERVAL)
 
     def drop_off_passenger(self, passenger, stop, bus_name):
+        """
+        Check if the passenger needs to get off at the current stop and update the passenger journey details.
+        """
         if stop == passenger['destination']:
             alighting_time = env.now
             waiting_time = passenger['boarding_time'] - passenger['arrival_time']
@@ -89,6 +101,9 @@ class BusSystem:
         return False
 
     def generate_passengers(self, env):
+        """
+        Generate passengers at random stops with random destinations.
+        """
         passenger_id = 1
         while True:
             yield env.timeout(random.randint(1, 10))  # Randomly generate passengers
@@ -111,11 +126,17 @@ class BusSystem:
 
     @staticmethod
     def time_to_string(minutes):
+        """
+        Convert time in minutes to HH:MM format.
+        """
         hours = minutes // 60
         mins = minutes % 60
         return f"{hours:02}:{mins:02}"
 
 class StopQueue:
+    """
+    Class to represent a queue of passengers at a bus stop.
+    """
     def __init__(self):
         self.queue = []
 
