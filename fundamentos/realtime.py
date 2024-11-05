@@ -6,7 +6,7 @@ INTERVALO_GENERACION = 1    # Intervalo de generación de vehículos
 TIEMPO_VIAJE = 3            # Tiempo que toma un viaje
 
 # Definición del entorno en tiempo real
-env = simpy.rt.RealtimeEnvironment(factor=1, strict=False)
+env = simpy.rt.RealtimeEnvironment(factor=2, strict=False)
 
 # Definición del proceso de vehículo
 def vehiculo(env, nombre):
