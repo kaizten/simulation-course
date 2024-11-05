@@ -1,0 +1,5 @@
+# How to install:
+#     pip3 install -r requirements.txt
+
+matplotlib>=3.9.2
+simpy>=4.1.1
